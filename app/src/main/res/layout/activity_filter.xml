@@ -24,10 +24,11 @@
         android:background="?attr/colorPrimary"
         android:clipToPadding="true"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" tools:targetApi="lollipop"/>
+        android:theme="?attr/actionBarTheme"
+        tools:targetApi="lollipop" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/CenterImage"
         android:layout_width="match_parent"
         android:layout_height="323dp"
         android:layout_alignParentLeft="true"
@@ -44,7 +45,7 @@
         android:id="@+id/controlunit"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/CenterImage"
         android:orientation="horizontal"
         android:padding="8dp">
 
