@@ -2,4 +2,8 @@
     <string name="app_name">Picter</string>
     <string name="title_activity_filter">FilterActivity</string>
     <string name="todo">TODO</string>
+    <string name="permission_request_title">Permission Request</string>
+    <string name="permission_granted_title">Permission Grantedt</string>
+    <string name="permission_request">Storage access is needed, would you like to grant permission?</string>
+    <string name="permission_granted">Thank you for providing the access(es), you can now continue using Picter.</string>
 </resources>

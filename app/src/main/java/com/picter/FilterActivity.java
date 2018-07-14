@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
 import static com.picter.R.id.toolbar;
@@ -62,15 +66,10 @@ public class FilterActivity extends Activity {
 
 
             public void onClick(View v) {
+                requestStoragePermission();
                 if (ContextCompat.checkSelfPermission(FilterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(FilterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        //show message
-                    } else {
-                        ActivityCompat.requestPermissions(FilterActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
-                    }
                     return;
                 }
-
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -83,7 +82,9 @@ public class FilterActivity extends Activity {
         switch(requestCode){
             case MY_PERMISSION_REQUEST:
                     if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                //show message
+                        new MaterialDialog.Builder(FilterActivity.this).title(R.string.permission_granted_title).content(R.string.permission_granted)
+                                .positiveText("OK")
+                                .canceledOnTouchOutside(true).show();
                     }else{
                 Log.d(TAG,"Permission denied!");
                     }
@@ -104,6 +105,26 @@ public class FilterActivity extends Activity {
 
         }
 
+    }
+    public  void  requestStoragePermission(){
+        if (ContextCompat.checkSelfPermission(FilterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(FilterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                new MaterialDialog.Builder(FilterActivity.this).title(R.string.permission_request_title)
+                        .content(R.string.permission_request)
+                        .positiveText("Yes").negativeText("No")
+                        .canceledOnTouchOutside(true)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                startActivityForResult(new Intent(Settings.ACTION_SETTINGS),0);
+                            }
+                        })
+                        .show();
+            } else {
+                ActivityCompat.requestPermissions(FilterActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
+            }
+            return;
+        }
     }
 
 
