@@ -3,6 +3,8 @@ package com.picter;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
@@ -10,6 +12,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,12 +20,25 @@ import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+
+import com.picter.Utility.Helper;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
-import static com.picter.R.id.toolbar;
+import android.graphics.Bitmap;
+
+import com.zomato.photofilters.imageprocessors.Filter;
+import com.zomato.photofilters.imageprocessors.ImageProcessor;
+import com.zomato.photofilters.imageprocessors.SubFilter;
+import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubfilter;
 
 
-public class FilterActivity extends Activity {
+
+public class FilterActivity extends AppCompatActivity {
+    static
+    {
+        System.loadLibrary("NativeImageProcessor");
+    }
     Toolbar mToolbar;
     ImageView mTickImage;
     ImageView mCenterImage;
@@ -35,6 +51,33 @@ public class FilterActivity extends Activity {
     ImageView m2ndFilterImage;
     ImageView m3rdFilterImage;
     ImageView m4thFilterImage;
+
+    Target mSmallTarget=new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            Bitmap workingBitmap = Bitmap.createBitmap(bitmap);
+            Bitmap mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
+
+            Filter myFilter = new Filter();
+            myFilter.addSubFilter(new BrightnessSubfilter(90));
+            Bitmap ouputImage = myFilter.processFilter(mutableBitmap);
+
+            Helper.writeToExternalStorage(FilterActivity.this,"brightness.png",ouputImage);
+
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"brightness.png")).fit().centerInside().into(m1stFilterImage);
+
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
 
 
 
@@ -64,7 +107,6 @@ public class FilterActivity extends Activity {
 
         mCenterImage.setOnClickListener(new View.OnClickListener(){
 
-
             public void onClick(View v) {
                 requestStoragePermission();
                 if (ContextCompat.checkSelfPermission(FilterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -76,8 +118,15 @@ public class FilterActivity extends Activity {
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE);
 
             }
+
         });
+
     }
+
+
+// on create closes
+
+
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults ){
         switch(requestCode){
             case MY_PERMISSION_REQUEST:
@@ -90,21 +139,17 @@ public class FilterActivity extends Activity {
                     }
         }
     }
-
     public void onActivityResult(int requestCode,int resultCode, Intent data){
         if(requestCode==PICK_IMAGE&&resultCode==Activity.RESULT_OK){
             Uri selectedImageUri= data.getData();
 
-            Picasso.get().load(selectedImageUri).fit().centerInside().into(mCenterImage);
+            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(mCenterImage);
 
-            Picasso.get().load(selectedImageUri).fit().centerInside().into(m1stFilterImage);
-            Picasso.get().load(selectedImageUri).fit().centerInside().into(m2ndFilterImage);
-            Picasso.get().load(selectedImageUri).fit().centerInside().into(m3rdFilterImage);
-            Picasso.get().load(selectedImageUri).fit().centerInside().into(m4thFilterImage);
-
-
+            Picasso.with(FilterActivity.this).load(selectedImageUri).into(mSmallTarget);
+            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m2ndFilterImage);
+            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m3rdFilterImage);
+            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m4thFilterImage);
         }
-
     }
     public  void  requestStoragePermission(){
         if (ContextCompat.checkSelfPermission(FilterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -126,6 +171,8 @@ public class FilterActivity extends Activity {
             return;
         }
     }
+
+
 
 
 }
