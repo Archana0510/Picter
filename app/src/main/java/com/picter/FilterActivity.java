@@ -1,6 +1,7 @@
 package com.picter;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -31,7 +32,9 @@ import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.ImageProcessor;
 import com.zomato.photofilters.imageprocessors.SubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubfilter;
-
+import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubfilter;
+import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
+import com.zomato.photofilters.imageprocessors.subfilters.VignetteSubfilter;
 
 
 public class FilterActivity extends AppCompatActivity {
@@ -57,14 +60,36 @@ public class FilterActivity extends AppCompatActivity {
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             Bitmap workingBitmap = Bitmap.createBitmap(bitmap);
             Bitmap mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
+//Brightness
+            Filter myFilterBrightness = new Filter();
+            myFilterBrightness.addSubFilter(new BrightnessSubfilter(90));
+            Bitmap outputImageBrightness = myFilterBrightness.processFilter(mutableBitmap);
+            Helper.writeToExternalStorage(FilterActivity.this,"Brightness.png",outputImageBrightness);
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"Brightness.png")).fit().centerInside().into(m1stFilterImage);
+//contrast
+            mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
+            Filter myFilterContrast = new Filter();
+            myFilterContrast.addSubFilter(new ContrastSubfilter(1.2f));
+            Bitmap outputImageContrast = myFilterContrast.processFilter(mutableBitmap);
+            Helper.writeToExternalStorage(FilterActivity.this,"Contrast.png",outputImageContrast);
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"Contrast.png")).fit().centerInside().into(m2ndFilterImage);
+//saturation
+            mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
+            Filter myFilterSaturation = new Filter();
+            myFilterSaturation.addSubFilter(new SaturationSubfilter(1.3f));
+            Bitmap outputImageSaturation = myFilterSaturation.processFilter(mutableBitmap);
+            Helper.writeToExternalStorage(FilterActivity.this,"Saturation.png",outputImageSaturation);
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"Saturation.png")).fit().centerInside().into(m3rdFilterImage);
+//vignette
+            mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
+            Filter myFilterVignette = new Filter();
+            myFilterVignette.addSubFilter(new VignetteSubfilter(FilterActivity.this, 100));
+            Bitmap outputImageVignette = myFilterVignette.processFilter(mutableBitmap);
+            Helper.writeToExternalStorage(FilterActivity.this,"Vignette.png",outputImageVignette);
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"Vignette.png")).fit().centerInside().into(m4thFilterImage);
 
-            Filter myFilter = new Filter();
-            myFilter.addSubFilter(new BrightnessSubfilter(90));
-            Bitmap ouputImage = myFilter.processFilter(mutableBitmap);
 
-            Helper.writeToExternalStorage(FilterActivity.this,"brightness.png",ouputImage);
 
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"brightness.png")).fit().centerInside().into(m1stFilterImage);
 
         }
 
@@ -144,8 +169,9 @@ public class FilterActivity extends AppCompatActivity {
             Uri selectedImageUri= data.getData();
 
             Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(mCenterImage);
-
             Picasso.with(FilterActivity.this).load(selectedImageUri).into(mSmallTarget);
+
+            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m1stFilterImage);
             Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m2ndFilterImage);
             Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m3rdFilterImage);
             Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m4thFilterImage);
