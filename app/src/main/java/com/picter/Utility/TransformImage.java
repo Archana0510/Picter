@@ -11,10 +11,15 @@ import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 import com.zomato.photofilters.imageprocessors.subfilters.VignetteSubfilter;
 
 public class TransformImage {
-    private static  final int DEFAULT_BRIGHTNESS=70;
-    private static  final int DEFAULT_CONTRAST=50;
-    private static  final int DEFAULT_SATURATION=5;
-    private static  final int DEFAULT_VIGNETTE=100;
+    public static  final int MAX_BRIGHTNESS=100;
+    public static  final int MAX_CONTRAST=100;
+    public static  final int MAX_SATURATION=5;
+    public static  final int MAX_VIGNETTE=255;
+
+    public static  final int DEFAULT_BRIGHTNESS=70;
+    public static  final int DEFAULT_CONTRAST=50;
+    public static  final int DEFAULT_SATURATION=5;
+    public static  final int DEFAULT_VIGNETTE=100;
 
     private String mFileName;
     private Bitmap mBitmap;
@@ -62,45 +67,45 @@ public class TransformImage {
         mFileName = "";
     }
 
-        public Bitmap addBrightnessSubFilter(){
+        public Bitmap addBrightnessSubFilter(int brightness){
             Filter myFilterBrightness = new Filter();
             Bitmap workingBitmap = Bitmap.createBitmap(mBitmap);
             Bitmap mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
 
-            myFilterBrightness.addSubFilter(new BrightnessSubfilter(DEFAULT_BRIGHTNESS));
+            myFilterBrightness.addSubFilter(new BrightnessSubfilter(brightness));
             Bitmap outputImageBrightness = myFilterBrightness.processFilter(mutableBitmap);
 
             BrightnessBitmap= outputImageBrightness;
             return outputImageBrightness;
 
         }
-        public Bitmap addContrastSubFilter(){
+        public Bitmap addContrastSubFilter(int contrast){
             Filter myFilterContrast = new Filter();
             Bitmap workingBitmap = Bitmap.createBitmap(mBitmap);
             Bitmap mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
 
-            myFilterContrast.addSubFilter(new ContrastSubfilter(DEFAULT_CONTRAST));
+            myFilterContrast.addSubFilter(new ContrastSubfilter(contrast));
             Bitmap outputImageContrast = myFilterContrast.processFilter(mutableBitmap);
             ContrastBitmap=outputImageContrast;
             return outputImageContrast;
 
 
         }
-        public Bitmap addSaturationSubFilter(){
+        public Bitmap addSaturationSubFilter(int saturation){
             Filter myFilterSaturation = new Filter();
             Bitmap workingBitmap = Bitmap.createBitmap(mBitmap);
             Bitmap mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
-            myFilterSaturation.addSubFilter(new SaturationSubfilter(DEFAULT_SATURATION));
+            myFilterSaturation.addSubFilter(new SaturationSubfilter(saturation));
             Bitmap outputImageSaturation = myFilterSaturation.processFilter(mutableBitmap);
             SaturationBitmap=outputImageSaturation;
             return outputImageSaturation;
 
         }
-        public Bitmap addVignetteSubFilter(){
+        public Bitmap addVignetteSubFilter(int vignette){
             Filter myFilterVignette = new Filter();
             Bitmap workingBitmap = Bitmap.createBitmap(mBitmap);
             Bitmap mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
-            myFilterVignette.addSubFilter(new VignetteSubfilter(mContext, DEFAULT_VIGNETTE));
+            myFilterVignette.addSubFilter(new VignetteSubfilter(mContext, vignette));
             Bitmap outputImageVignette = myFilterVignette.processFilter(mutableBitmap);
             VignetteBitmap=outputImageVignette;
             return outputImageVignette;
