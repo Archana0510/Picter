@@ -23,6 +23,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import com.picter.Utility.Helper;
+import com.picter.Utility.TransformImage;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -58,38 +59,23 @@ public class FilterActivity extends AppCompatActivity {
     Target mSmallTarget=new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            Bitmap workingBitmap = Bitmap.createBitmap(bitmap);
-            Bitmap mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
-//Brightness
-            Filter myFilterBrightness = new Filter();
-            myFilterBrightness.addSubFilter(new BrightnessSubfilter(90));
-            Bitmap outputImageBrightness = myFilterBrightness.processFilter(mutableBitmap);
-            Helper.writeToExternalStorage(FilterActivity.this,"Brightness.png",outputImageBrightness);
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"Brightness.png")).fit().centerInside().into(m1stFilterImage);
+            TransformImage transformImage=new TransformImage(FilterActivity.this, bitmap);
+//brightness
+            transformImage.addBrightnessSubFilter();
+            Helper.writeToExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_BRIGHTNESS),transformImage.getBitmap(TransformImage.FILTER_BRIGHTNESS));
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_BRIGHTNESS))).fit().centerInside().into(m1stFilterImage);
 //contrast
-            mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
-            Filter myFilterContrast = new Filter();
-            myFilterContrast.addSubFilter(new ContrastSubfilter(1.2f));
-            Bitmap outputImageContrast = myFilterContrast.processFilter(mutableBitmap);
-            Helper.writeToExternalStorage(FilterActivity.this,"Contrast.png",outputImageContrast);
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"Contrast.png")).fit().centerInside().into(m2ndFilterImage);
+            transformImage.addContrastSubFilter();
+            Helper.writeToExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_CONTRAST),transformImage.getBitmap(TransformImage.FILTER_CONTRAST));
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_CONTRAST))).fit().centerInside().into(m2ndFilterImage);
 //saturation
-            mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
-            Filter myFilterSaturation = new Filter();
-            myFilterSaturation.addSubFilter(new SaturationSubfilter(1.3f));
-            Bitmap outputImageSaturation = myFilterSaturation.processFilter(mutableBitmap);
-            Helper.writeToExternalStorage(FilterActivity.this,"Saturation.png",outputImageSaturation);
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"Saturation.png")).fit().centerInside().into(m3rdFilterImage);
+            transformImage.addSaturationSubFilter();
+            Helper.writeToExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_SATURATION),transformImage.getBitmap(TransformImage.FILTER_SATURATION));
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_SATURATION))).fit().centerInside().into(m3rdFilterImage);
 //vignette
-            mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888,true);
-            Filter myFilterVignette = new Filter();
-            myFilterVignette.addSubFilter(new VignetteSubfilter(FilterActivity.this, 100));
-            Bitmap outputImageVignette = myFilterVignette.processFilter(mutableBitmap);
-            Helper.writeToExternalStorage(FilterActivity.this,"Vignette.png",outputImageVignette);
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,"Vignette.png")).fit().centerInside().into(m4thFilterImage);
-
-
-
+            transformImage.addVignetteSubFilter();
+            Helper.writeToExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_VIGNETTE),transformImage.getBitmap(TransformImage.FILTER_VIGNETTE));
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_VIGNETTE))).fit().centerInside().into(m4thFilterImage);
 
         }
 
@@ -171,10 +157,6 @@ public class FilterActivity extends AppCompatActivity {
             Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(mCenterImage);
             Picasso.with(FilterActivity.this).load(selectedImageUri).into(mSmallTarget);
 
-            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m1stFilterImage);
-            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m2ndFilterImage);
-            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m3rdFilterImage);
-            Picasso.with(FilterActivity.this).load(selectedImageUri).fit().centerInside().into(m4thFilterImage);
         }
     }
     public  void  requestStoragePermission(){
