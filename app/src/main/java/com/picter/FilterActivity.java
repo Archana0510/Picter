@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -56,26 +57,31 @@ public class FilterActivity extends AppCompatActivity {
     ImageView m3rdFilterImage;
     ImageView m4thFilterImage;
 
+    int mScreenWidth;
+    int mScreenHeight;
+
+    TransformImage mtransformImage;
+
     Target mSmallTarget=new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            TransformImage transformImage=new TransformImage(FilterActivity.this, bitmap);
+            mtransformImage=new TransformImage(FilterActivity.this, bitmap);
 //brightness
-            transformImage.addBrightnessSubFilter();
-            Helper.writeToExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_BRIGHTNESS),transformImage.getBitmap(TransformImage.FILTER_BRIGHTNESS));
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_BRIGHTNESS))).fit().centerInside().into(m1stFilterImage);
+            mtransformImage.addBrightnessSubFilter();
+            Helper.writeToExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_BRIGHTNESS),mtransformImage.getBitmap(TransformImage.FILTER_BRIGHTNESS));
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_BRIGHTNESS))).fit().centerInside().into(m1stFilterImage);
 //contrast
-            transformImage.addContrastSubFilter();
-            Helper.writeToExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_CONTRAST),transformImage.getBitmap(TransformImage.FILTER_CONTRAST));
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_CONTRAST))).fit().centerInside().into(m2ndFilterImage);
+            mtransformImage.addContrastSubFilter();
+            Helper.writeToExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_CONTRAST),mtransformImage.getBitmap(TransformImage.FILTER_CONTRAST));
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_CONTRAST))).fit().centerInside().into(m2ndFilterImage);
 //saturation
-            transformImage.addSaturationSubFilter();
-            Helper.writeToExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_SATURATION),transformImage.getBitmap(TransformImage.FILTER_SATURATION));
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_SATURATION))).fit().centerInside().into(m3rdFilterImage);
+            mtransformImage.addSaturationSubFilter();
+            Helper.writeToExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_SATURATION),mtransformImage.getBitmap(TransformImage.FILTER_SATURATION));
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_SATURATION))).fit().centerInside().into(m3rdFilterImage);
 //vignette
-            transformImage.addVignetteSubFilter();
-            Helper.writeToExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_VIGNETTE),transformImage.getBitmap(TransformImage.FILTER_VIGNETTE));
-            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,transformImage.getFilename(TransformImage.FILTER_VIGNETTE))).fit().centerInside().into(m4thFilterImage);
+            mtransformImage.addVignetteSubFilter();
+            Helper.writeToExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_VIGNETTE),mtransformImage.getBitmap(TransformImage.FILTER_VIGNETTE));
+            Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_VIGNETTE))).fit().centerInside().into(m4thFilterImage);
 
         }
 
@@ -131,6 +137,42 @@ public class FilterActivity extends AppCompatActivity {
             }
 
         });
+        m1stFilterImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_BRIGHTNESS))).resize(0,(mScreenHeight/2)).into(mCenterImage);
+
+            }
+        });
+        m2ndFilterImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_CONTRAST))).resize(0,(mScreenHeight/2)).into(mCenterImage);
+
+
+            }
+        });
+        m3rdFilterImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_SATURATION))).resize(0,(mScreenHeight/2)).into(mCenterImage);
+
+
+            }
+        });
+        m4thFilterImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Picasso.with(FilterActivity.this).load(Helper.getFileFromExternalStorage(FilterActivity.this,mtransformImage.getFilename(TransformImage.FILTER_VIGNETTE))).resize(0,(mScreenHeight/2)).into(mCenterImage);
+
+
+            }
+        });
+        DisplayMetrics dm= new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        mScreenHeight=dm.heightPixels;
+        mScreenWidth=dm.widthPixels;
+
 
     }
 
