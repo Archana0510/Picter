@@ -1,9 +1,9 @@
-package com.picter;
+package com.example.picter;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,10 +14,9 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent inte= new Intent(MainActivity.this, FilterActivity.class);
-                startActivity(inte);
-
+                Intent main = new Intent(MainActivity.this, IntroActivity.class);
+                startActivity(main);
             }
-        },1000);
+        },2000);
     }
 }

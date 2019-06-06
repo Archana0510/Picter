@@ -1,9 +1,8 @@
-package com.picter.Utility;
+package com.example.picter.Utility;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.picter.FilterActivity;
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubfilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubfilter;
@@ -15,6 +14,8 @@ public class TransformImage {
     public static  final int MAX_CONTRAST=100;
     public static  final int MAX_SATURATION=5;
     public static  final int MAX_VIGNETTE=255;
+
+
 
     public static  final int DEFAULT_BRIGHTNESS=70;
     public static  final int DEFAULT_CONTRAST=50;
@@ -64,7 +65,7 @@ public class TransformImage {
     public TransformImage(Context context, Bitmap bitmap) {
         mBitmap = bitmap;
         mContext = context;
-        mFileName = "";
+        mFileName = System.currentTimeMillis() + "";
     }
 
         public Bitmap addBrightnessSubFilter(int brightness){

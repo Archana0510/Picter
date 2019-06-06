@@ -1,10 +1,10 @@
-package com.picter.Utility;
+package com.example.picter.Utility;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
-import com.picter.R;
+import com.example.picter.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;

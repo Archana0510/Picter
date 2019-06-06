@@ -1,4 +1,4 @@
-package com.picter;
+package com.example.picter;
 
 import org.junit.Test;
 
