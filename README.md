@@ -1,4 +1,4 @@
-# Picter
+## Picter
 A photo filter app
 
 # Hardware requirement 
