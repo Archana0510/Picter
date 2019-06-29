@@ -12,6 +12,6 @@ A photo filter app
 3. Android Virtual Device (AVD) manager 
 
 #References
-https://github.com/square/picasso 
-https://github.com/Zomato/AndroidPhotoFilters 
-https://github.com/afollestad/material-dialogs 
+1. https://github.com/square/picasso 
+2. https://github.com/Zomato/AndroidPhotoFilters 
+3. https://github.com/afollestad/material-dialogs 
