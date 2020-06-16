@@ -1,5 +1,14 @@
 # Picter
-A photo filter app
+_A Photo Filter App_   
+
+This project was developed using android studio.  
+This android application can load images from the device and apply 4 basaic filters:
+1. Brightness
+2. Contrast
+3. Saturation
+4. Vignette
+   
+The intensity of each of these filters can be adjusted using the seekbar.
 
 ## Hardware requirement 
 1. 3 GB RAM minimum, 8 GB RAM recommended; plus 1 GB for the Android Emulator 
