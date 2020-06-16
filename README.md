@@ -1,8 +1,8 @@
 # Picter
 _A Photo Filter App_   
 
-This project was developed using android studio.  
-This android application can load images from the device and apply 4 basaic filters:
+This project was developed using Android Studio.  
+This android application can load images from the device and apply 4 basic filters:
 1. Brightness
 2. Contrast
 3. Saturation
